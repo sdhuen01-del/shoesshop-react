@@ -7,11 +7,18 @@ import Detail from './components/Detail'
 import Footer from './components/Footer'
 import Cart from './components/Cart'
 import About from './components/About'
+import { createContext } from 'react'
+import { useSelector } from 'react-redux'
+
+export const Context1 = createContext()
 
 function App() {
   const [shoes, setShoes] = useState(data) 
   console.log(shoes)
   const navigate = useNavigate()
+  const [remain, setRemain] = useState([10,11,12])
+  const state = useSelector((state)=>{return state})
+  console.log(state)
 
   return (
     <div className="App">      
@@ -35,14 +42,17 @@ function App() {
               Cart
             </a>
           </div>
-
         </div>
       </nav>
 
       
       <Routes>
         <Route path='/' element={<Home shoes={shoes} setShoes={setShoes} />} />
-        <Route path='/detail/:id' element={<Detail shoes={shoes} />} />
+        <Route path='/detail/:id' element={
+          <Context1.Provider value={{remain, shoes}}>
+            <Detail shoes={shoes} />
+          </Context1.Provider>
+        } />
         
         <Route path="/about" element={<About />}>
           <Route path="member" element={<div>멤버입니다.</div>} />
